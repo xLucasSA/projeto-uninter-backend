@@ -1,0 +1,7 @@
+# Scripts e Dockerfiles rodam em containers Linux; CRLF quebra o shebang (/bin/sh^M)
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.pdf binary
+*.docx binary
