@@ -1,0 +1,23 @@
+FROM ghcr.io/astral-sh/uv:0.11.26 AS uv
+
+FROM python:3.12-slim AS base
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    UV_PROJECT_ENVIRONMENT=/opt/venv \
+    PATH="/opt/venv/bin:$PATH"
+COPY --from=uv /uv /usr/local/bin/uv
+RUN useradd --create-home --uid 10001 raizes
+WORKDIR /app
+
+FROM base AS deps
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project
+
+FROM deps AS final
+COPY . .
+RUN uv sync --frozen --no-dev --no-editable
+USER raizes
+EXPOSE 8002
+CMD ["uvicorn", "payment_mock.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8002"]
