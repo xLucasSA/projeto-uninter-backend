@@ -21,5 +21,59 @@ services:
       interval: 5s
       retries: 10
 
+  backoffice-migrate:
+    build: ./apps/backoffice
+    image: raizes-backoffice:local
+    env_file: .env
+    command: ["sh", "-c", "python manage.py migrate --noinput && python manage.py seed_demo"]
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  backoffice:
+    build: ./apps/backoffice
+    image: raizes-backoffice:local
+    env_file: .env
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/admin/login/')"]
+      interval: 10s
+      retries: 10
+    depends_on:
+      backoffice-migrate: { condition: service_completed_successfully }
+
+  api-migrate:
+    build: ./apps/api
+    image: raizes-api:local
+    env_file: .env
+    command: ["sh", "-c", "alembic upgrade head && python -m raizes_api.seed"]
+    depends_on:
+      backoffice-migrate: { condition: service_completed_successfully }
+
+  payment-mock:
+    build: ./apps/payment-mock
+    image: raizes-payment-mock:local
+    env_file: .env
+    ports:
+      - "8002:8002"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8002/health')"]
+      interval: 10s
+      retries: 10
+
+  api:
+    build: ./apps/api
+    image: raizes-api:local
+    env_file: .env
+    ports:
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health/ready')"]
+      interval: 10s
+      retries: 10
+    depends_on:
+      api-migrate: { condition: service_completed_successfully }
+      payment-mock: { condition: service_healthy }
+
 volumes:
   pgdata:
