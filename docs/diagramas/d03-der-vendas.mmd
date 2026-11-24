@@ -1,0 +1,70 @@
+%% DER do schema vendas (dono: API FastAPI). Fonte: apps/api/migrations/versions/0001_schema_vendas.py.
+%% UNIDADES e PRODUTOS pertencem ao schema catalogo (FKs entre schemas).
+erDiagram
+    direction LR
+    UNIDADES ||--o{ PEDIDOS : recebe
+    CLIENTES |o--o{ PEDIDOS : faz
+    CLIENTES ||--o{ CONSENTIMENTOS : concede
+    PEDIDOS ||--|{ ITENS_PEDIDO : "contém"
+    PRODUTOS ||--o{ ITENS_PEDIDO : "é vendido"
+    PEDIDOS ||--|{ HISTORICO_STATUS_PEDIDO : registra
+    PEDIDOS ||--o{ PAGAMENTOS : "é pago por"
+    PEDIDOS ||--o{ LANCAMENTOS_FIDELIDADE : gera
+    CLIENTES ||--o{ LANCAMENTOS_FIDELIDADE : acumula
+
+    UNIDADES {
+        bigint id PK "catalogo"
+    }
+    PRODUTOS {
+        bigint id PK "catalogo"
+    }
+    CLIENTES {
+        uuid id PK
+        varchar email UK
+        varchar telefone UK "opcional"
+        varchar senha_hash "Argon2id"
+        timestamptz anonimizado_em
+    }
+    CONSENTIMENTOS {
+        uuid id PK
+        uuid cliente_id FK
+        varchar finalidade "1 ativo"
+        varchar versao_termo
+        timestamptz revogado_em
+    }
+    PEDIDOS {
+        uuid id PK
+        bigint unidade_id FK
+        uuid cliente_id FK "nulo = anônimo"
+        varchar canal_pedido "CHECK"
+        varchar status "CHECK"
+        numeric total ">= 0"
+    }
+    ITENS_PEDIDO {
+        bigint id PK
+        uuid pedido_id FK
+        bigint produto_id FK
+        int quantidade "1 a 20"
+        numeric preco_unitario "snapshot"
+    }
+    HISTORICO_STATUS_PEDIDO {
+        bigint id PK
+        uuid pedido_id FK
+        varchar status_anterior
+        varchar status_novo
+        varchar ator_tipo
+    }
+    PAGAMENTOS {
+        uuid id PK
+        uuid pedido_id FK "1 ativo"
+        varchar status "CHECK"
+        numeric valor "> 0"
+        varchar transacao_externa_id UK
+    }
+    LANCAMENTOS_FIDELIDADE {
+        uuid id PK
+        uuid cliente_id FK
+        uuid pedido_id FK "UK com tipo"
+        varchar tipo "CREDITO/ESTORNO"
+        int pontos
+    }

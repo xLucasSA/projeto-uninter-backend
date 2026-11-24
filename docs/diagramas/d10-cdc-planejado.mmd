@@ -1,0 +1,22 @@
+%% Arquitetura-alvo do CQRS físico (planejado): outbox → Debezium → Redis → projetor → banco de leitura.
+sequenceDiagram
+    autonumber
+    participant CMD as Comando
+    participant PG as BD escrita
+    participant DBZ as Debezium
+    participant RS as Redis Streams
+    participant PROJ as Projetor
+    participant RD as BD leitura
+
+    CMD->>PG: estado + outbox, COMMIT
+    PG-->>DBZ: WAL lógico (outbox)
+    DBZ->>RS: XADD raizes.agregado
+    PROJ->>RS: XREADGROUP
+    RS-->>PROJ: eventos
+    PROJ->>RD: registra eventId (dedup)
+    alt evento novo
+        PROJ->>RD: upsert projeções, COMMIT
+    else já processado
+        PROJ->>RD: ignora, COMMIT
+    end
+    PROJ->>RS: XACK após o commit

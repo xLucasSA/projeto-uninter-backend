@@ -1,0 +1,42 @@
+%% Componentes: MVP (linhas cheias) e arquitetura-alvo do CDC (tracejado).
+flowchart TB
+    subgraph canais["Canais"]
+        direction LR
+        app["App / Web / Pick-up"]
+        totem["Totem"]
+        staff["Atendente / Cozinha"]
+        ger["Gerente / Matriz / Estoquista"]
+    end
+
+    subgraph mvp["MVP — profile padrão do Docker Compose"]
+        api["api<br/>FastAPI: comandos e consultas"]
+        bo["backoffice<br/>Django Admin"]
+        pm["payment-mock<br/>gateway simulado"]
+        pg[("PostgreSQL (escrita)<br/>schemas catalogo + vendas")]
+    end
+
+    subgraph cdc["Planejado — profile cdc"]
+        direction LR
+        dbz["Debezium Server<br/>Outbox Event Router"]
+        rs[("Redis Streams")]
+        proj["projector<br/>worker da API"]
+        pgr[("PostgreSQL (leitura)<br/>projeções sem PII")]
+    end
+
+    app -->|JWT CLIENTE| api
+    totem -->|JWT DISPOSITIVO| api
+    staff -->|JWT FUNCIONARIO| api
+    ger -->|sessão Django| bo
+    api -->|vendas: leitura e escrita<br/>catalogo: acesso restrito| pg
+    bo -->|catalogo: leitura e escrita| pg
+    api -->|POST /transacoes| pm
+    pm -->|webhook HMAC| api
+    pg -.->|WAL lógico: outbox_eventos| dbz
+    dbz -.->|XADD| rs
+    rs -.->|XREADGROUP| proj
+    proj -.->|upsert idempotente| pgr
+    bo -.->|relatórios| pgr
+    api -.->|consultas volumosas| pgr
+
+    classDef planejado fill:#ffffff,stroke:#777777,stroke-dasharray:5 4,color:#555555
+    class dbz,rs,proj,pgr planejado

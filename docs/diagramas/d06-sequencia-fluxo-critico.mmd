@@ -1,0 +1,28 @@
+%% Fluxo crítico: pedido → pagamento (mock) → webhook → status.
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant API as API
+    participant DB as PostgreSQL
+    participant GW as Gateway (mock)
+
+    C->>API: POST /pedidos (Idempotency-Key)
+    API->>DB: reserva chave, valida cardápio
+    API->>DB: UPDATE estoque (condicional)
+    API->>DB: pedido, auditoria, outbox, COMMIT
+    API-->>C: 201 AGUARDANDO_PAGAMENTO
+    C->>API: POST /pedidos/{id}/pagamentos
+    API->>DB: pagamento PENDENTE, COMMIT
+    API->>GW: POST /transacoes (timeout, retry)
+    GW-->>API: 202 transacaoId
+    API-->>C: 202 PENDENTE
+    GW->>API: webhook assinado (HMAC)
+    API->>DB: deduplica evento, bloqueia pedido
+    alt APROVADO
+        API->>DB: PAGO, pontos, auditoria, outbox
+    else RECUSADO
+        API->>DB: PAGAMENTO_RECUSADO, estorno
+    end
+    API-->>GW: 200
+    C->>API: GET /pedidos/{id}
+    API-->>C: 200 status atualizado

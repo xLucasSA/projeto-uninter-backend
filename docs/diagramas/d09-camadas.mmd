@@ -1,0 +1,29 @@
+%% Camadas e regra de dependência (as setas apontam para quem é usado).
+flowchart TB
+    subgraph apiproj["API FastAPI (apps/api)"]
+        direction TB
+        iface["API / Interface<br/>routers, schemas Pydantic, dependências de auth,<br/>handlers de erro, middleware de request-id"]
+        app["Application<br/>commands (CriarPedido, SolicitarPagamento, ProcessarWebhook...)<br/>queries (ListarPedidos, ObterCardapio...) e ports"]
+        dom["Domain<br/>Pedido, Pagamento, Cliente, Dinheiro,<br/>máquina de estados, políticas de canal e escopo"]
+        infra["Infrastructure<br/>SQLAlchemy, repositórios, Unit of Work, Argon2/JWT,<br/>cliente HTTP do gateway, auditoria, outbox"]
+        iface --> app
+        app --> dom
+        infra -. implementa as ports .-> app
+        infra --> dom
+    end
+
+    subgraph boproj["Back-office Django (apps/backoffice)"]
+        direction TB
+        adm["Interface<br/>admin.py"]
+        svc["Application<br/>services / selectors (planejado)"]
+        mod["Domain<br/>models com constraints, managers de escopo"]
+        orm["Infrastructure<br/>ORM, migrations, auditoria, outbox"]
+        adm --> svc
+        svc --> mod
+        orm --> mod
+    end
+
+    dom ~~~ adm
+
+    classDef planejado fill:#ffffff,stroke:#777777,stroke-dasharray:5 4,color:#555555
+    class svc planejado

@@ -1,0 +1,13 @@
+%% Máquina de estados do pedido. Fonte: apps/api/src/raizes_api/domain/pedidos/status.py.
+stateDiagram-v2
+    [*] --> AGUARDANDO_PAGAMENTO: criar (reserva estoque)
+    AGUARDANDO_PAGAMENTO --> PAGO: webhook APROVADO (SISTEMA)
+    AGUARDANDO_PAGAMENTO --> PAGAMENTO_RECUSADO: webhook RECUSADO (SISTEMA) / estorno
+    AGUARDANDO_PAGAMENTO --> CANCELADO: cliente, totem, atendente, gerência / estorno
+    PAGO --> EM_PREPARO: cozinha, gerência
+    PAGO --> CANCELADO: gerência / estorno de estoque e pontos
+    EM_PREPARO --> PRONTO: cozinha, gerência
+    PRONTO --> ENTREGUE: atendente, gerência
+    ENTREGUE --> [*]
+    PAGAMENTO_RECUSADO --> [*]
+    CANCELADO --> [*]

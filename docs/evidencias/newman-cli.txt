@@ -1,0 +1,222 @@
+Coleção Postman (docs/postman) executada com Newman 6.1.3 contra a stack do docker compose
+Data: 2026-11-23 22:49 -0300 | Código do commit 3394f6b
+
+newman
+
+Raízes do Nordeste — API (T01–T17)
+
+❏ 00 Setup
+↳ Preparo 01 Localizar unidades
+  GET http://api:8001/unidades?limit=100 [200 OK, 708B, 98ms]
+  ✓  200 com a lista de unidades
+  ✓  REC-01 e SAO-01 existem no seed
+
+↳ Preparo 02 Localizar produtos
+  GET http://api:8001/produtos?limit=100 [200 OK, 1.13kB, 15ms]
+  ✓  200 com a lista de produtos
+  ✓  Produtos usados na coleção existem no seed
+
+↳ Preparo 03 Cardápio de REC-01
+  GET http://api:8001/unidades/1/cardapio?limit=100 [200 OK, 1.11kB, 17ms]
+  ✓  200 com o cardápio
+  ✓  Tapioca e suco estão no cardápio e disponíveis
+
+↳ Preparo 04 Cadastrar cliente
+  POST http://api:8001/clientes [201 Created, 590B, 149ms]
+  ✓  201 Created
+  ✓  Consentimento FIDELIDADE registrado
+  ✓  Resposta não expõe a senha
+
+↳ Preparo 05 Login da cozinha de REC-01
+  POST http://api:8001/auth/staff/login [200 OK, 707B, 200ms]
+  ✓  200 OK
+  ✓  Perfil COZINHA
+
+↳ Preparo 06 Login do atendente de REC-01
+  POST http://api:8001/auth/staff/login [200 OK, 713B, 166ms]
+  ✓  200 OK
+  ✓  Perfil ATENDENTE
+
+↳ Preparo 07 Login do gerente de REC-01
+  POST http://api:8001/auth/staff/login [200 OK, 707B, 126ms]
+  ✓  200 OK
+  ✓  Perfil GERENTE com escopo em REC-01
+
+↳ Preparo 08 Login da matriz
+  POST http://api:8001/auth/staff/login [200 OK, 694B, 143ms]
+  ✓  200 OK
+  ✓  Perfil MATRIZ
+
+↳ Preparo 09 Estoque inicial de REC-01
+  GET http://api:8001/unidades/1/estoque?limit=100 [200 OK, 1.53kB, 17ms]
+  ✓  200 com o saldo por produto
+  ✓  Há saldo para os pedidos da coleção
+
+❏ 01 Auth e acesso
+↳ T01 Login do cliente
+  POST http://api:8001/auth/login [200 OK, 773B, 179ms]
+  ✓  200 OK
+  ✓  Devolve accessToken Bearer e perfil CLIENTE
+
+↳ T02 Listar pedidos sem token
+  GET http://api:8001/pedidos [401 Unauthorized, 431B, 6ms]
+  ✓  401 Unauthorized
+  ✓  Erro TOKEN_AUSENTE
+  ✓  Formato padrão de erro
+
+↳ Preparo Pedido S em SAO-01
+  POST http://api:8001/pedidos [201 Created, 634B, 30ms]
+  ✓  201 Created
+
+↳ T03 Cliente altera status
+  PATCH http://api:8001/pedidos/602b9ca2-05fc-47bd-913a-6f9bcaf186ce/status [403 Forbidden, 458B, 6ms]
+  ✓  403 Forbidden
+  ✓  Erro PERMISSAO_NEGADA
+
+↳ T04 Cozinha de REC-01 altera pedido de SAO-01
+  PATCH http://api:8001/pedidos/602b9ca2-05fc-47bd-913a-6f9bcaf186ce/status [403 Forbidden, 456B, 23ms]
+  ✓  403 Forbidden
+  ✓  Erro FORA_DO_ESCOPO_UNIDADE
+
+❏ 02 Validação
+↳ T05 Pedido sem canalPedido
+  POST http://api:8001/pedidos [422 Unprocessable Entity, 448B, 8ms]
+  ✓  422 Unprocessable Entity
+  ✓  Erro VALIDACAO apontando canalPedido
+
+↳ T06 Quantidade negativa
+  POST http://api:8001/pedidos [422 Unprocessable Entity, 465B, 7ms]
+  ✓  422 Unprocessable Entity
+  ✓  Erro VALIDACAO apontando itens[0].quantidade
+
+↳ T07 Produto inexistente
+  POST http://api:8001/pedidos [404 Not Found, 464B, 14ms]
+  ✓  404 Not Found
+  ✓  Erro PRODUTO_NAO_ENCONTRADO
+
+❏ 03 Pedidos e estoque
+↳ T08 Estoque insuficiente
+  POST http://api:8001/pedidos [409 Conflict, 469B, 23ms]
+  ✓  409 Conflict
+  ✓  Erro ESTOQUE_INSUFICIENTE com o disponível
+
+↳ T09a Criar pedido
+  POST http://api:8001/pedidos [201 Created, 730B, 31ms]
+  ✓  201 Created
+  ✓  Pedido aguardando pagamento, canal APP
+  ✓  Total = soma dos preços do cardápio
+
+↳ T09b Estoque reservado
+  GET http://api:8001/unidades/1/estoque?limit=100 [200 OK, 1.53kB, 14ms]
+  ✓  200 OK
+  ✓  Itens do pedido A reservados (saldo − 1)
+  ✓  Pedido recusado no T08 não baixou estoque
+
+❏ 04 Pagamento
+↳ T10a Solicitar pagamento aprovado
+  POST http://api:8001/pedidos/d61d8cea-1b84-4123-8ea0-04133b758d77/pagamentos [202 Accepted, 380B, 41ms]
+  ✓  202 Accepted
+  ✓  Pagamento PENDENTE do pedido A, no valor do pedido
+
+↳ T10b Pedido pago pelo webhook
+  GET http://api:8001/pedidos/d61d8cea-1b84-4123-8ea0-04133b758d77 [200 OK, 652B, 12ms]
+  ✓  200 OK
+  ✓  Webhook do gateway aprovou: pedido PAGO
+
+↳ T10c Pontos creditados
+  GET http://api:8001/fidelidade/saldo [200 OK, 221B, 10ms]
+  ✓  200 OK
+  ✓  Saldo de pontos = floor(total do pedido A)
+
+↳ Preparo Pedido B
+  POST http://api:8001/pedidos [201 Created, 634B, 33ms]
+  ✓  201 Created
+
+↳ T11a Solicitar pagamento recusado
+  POST http://api:8001/pedidos/5ee36480-8191-4ab9-8603-d5397958e543/pagamentos [202 Accepted, 380B, 33ms]
+  ✓  202 Accepted
+  ✓  Pagamento PENDENTE até o webhook
+
+↳ T11b Pedido recusado pelo webhook
+  GET http://api:8001/pedidos/5ee36480-8191-4ab9-8603-d5397958e543 [200 OK, 570B, 10ms]
+  ✓  200 OK
+  ✓  Webhook do gateway recusou: pedido PAGAMENTO_RECUSADO
+
+↳ T11c Estoque estornado
+  GET http://api:8001/unidades/1/estoque?limit=100 [200 OK, 1.53kB, 16ms]
+  ✓  200 OK
+  ✓  Reserva do pedido B devolvida ao estoque
+
+↳ Preparo Pedido C
+  POST http://api:8001/pedidos [201 Created, 634B, 27ms]
+  ✓  201 Created
+
+↳ T12 Gateway sem resposta
+  POST http://api:8001/pedidos/ea32d769-9081-44d0-8e36-d95fc9516a76/pagamentos [503 Service Unavailable, 514B, 6.8s]
+  ✓  503 Service Unavailable
+  ✓  Erro GATEWAY_INDISPONIVEL
+
+↳ T13a Webhook com assinatura inválida
+  POST http://api:8001/webhooks/pagamentos [401 Unauthorized, 426B, 5ms]
+  ✓  401 Unauthorized
+  ✓  Erro ASSINATURA_WEBHOOK_INVALIDA
+
+↳ T13b Pedido continua aguardando pagamento
+  GET http://api:8001/pedidos/ea32d769-9081-44d0-8e36-d95fc9516a76 [200 OK, 572B, 9ms]
+  ✓  200 OK
+  ✓  Nem a falha do gateway nem o webhook forjado mudaram o pedido
+
+❏ 05 Operação
+↳ T14a Em preparo
+  PATCH http://api:8001/pedidos/d61d8cea-1b84-4123-8ea0-04133b758d77/status [200 OK, 658B, 25ms]
+  ✓  200 OK
+  ✓  Pedido EM_PREPARO
+
+↳ T14b Pronto
+  PATCH http://api:8001/pedidos/d61d8cea-1b84-4123-8ea0-04133b758d77/status [200 OK, 654B, 15ms]
+  ✓  200 OK
+  ✓  Pedido PRONTO
+
+↳ T14c Entregue
+  PATCH http://api:8001/pedidos/d61d8cea-1b84-4123-8ea0-04133b758d77/status [200 OK, 656B, 15ms]
+  ✓  200 OK
+  ✓  Pedido ENTREGUE
+
+↳ T15 Pedidos por canal
+  GET http://api:8001/pedidos?canalPedido=APP&limit=100 [200 OK, 2.42kB, 10ms]
+  ✓  200 OK
+  ✓  Envelope de paginação
+  ✓  Só pedidos do canal APP, incluindo o pedido A
+
+❏ 06 Auditoria
+↳ T16 Trilha do pedido
+  GET http://api:8001/auditoria?entidade=PEDIDO&entidadeId=d61d8cea-1b84-4123-8ea0-04133b758d77&limit=100 [200 OK, 3.01kB, 11ms]
+  ✓  200 OK
+  ✓  Criação, pagamento e pontos registrados
+  ✓  Aprovação registrada com o gateway como ator
+  ✓  Três mudanças de status da operação
+
+↳ T17 Acesso negado registrado
+  GET http://api:8001/auditoria?entidade=PEDIDO&entidadeId=602b9ca2-05fc-47bd-913a-6f9bcaf186ce&acao=ACESSO_NEGADO_ESCOPO [200 OK, 538B, 12ms]
+  ✓  200 OK
+  ✓  Negação do T04 gravada mesmo com o 403
+
+┌─────────────────────────┬────────────────────┬───────────────────┐
+│                         │           executed │            failed │
+├─────────────────────────┼────────────────────┼───────────────────┤
+│              iterations │                  1 │                 0 │
+├─────────────────────────┼────────────────────┼───────────────────┤
+│                requests │                 37 │                 0 │
+├─────────────────────────┼────────────────────┼───────────────────┤
+│            test-scripts │                 37 │                 0 │
+├─────────────────────────┼────────────────────┼───────────────────┤
+│      prerequest-scripts │                  7 │                 0 │
+├─────────────────────────┼────────────────────┼───────────────────┤
+│              assertions │                 78 │                 0 │
+├─────────────────────────┴────────────────────┴───────────────────┤
+│ total run duration: 10.3s                                        │
+├──────────────────────────────────────────────────────────────────┤
+│ total data received: 21.69kB (approx)                            │
+├──────────────────────────────────────────────────────────────────┤
+│ average response time: 226ms [min: 5ms, max: 6.8s, s.d.: 1098ms] │
+└──────────────────────────────────────────────────────────────────┘

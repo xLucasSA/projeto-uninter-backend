@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1660" height="950" viewBox="0 95 1660 950">
+<rect y="95" width="1660" height="950" fill="#ffffff"/>
+<rect x="320" y="125" width="964" height="855" fill="#fafafa" stroke="#444" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#111" font-weight="bold" text-anchor="middle" dominant-baseline="middle"><tspan x="500" y="955.0">Sistema Raízes do Nordeste</tspan></text>
+<polyline points="168.0,430.0 417.1,203.3" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="168.0,430.0 401.3,295.4" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="168.0,430.0 391.4,385.5" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="168.0,430.0 391.4,474.5" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="168.0,430.0 401.3,564.6" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="168.0,430.0 417.1,656.7" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="168.0,430.0 434.0,751.0" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="168.0,850.0 420.5,604.6" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="168.0,850.0 404.2,697.2" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="168.0,850.0 392.7,787.6" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="168.0,850.0 874.1,878.5" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="1497.0,290.0 1224.8,190.6" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="1497.0,290.0 1230.0,281.0" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="1497.0,290.0 1226.5,371.3" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="1497.0,290.0 1215.7,462.7" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="1497.0,290.0 1159.2,844.9" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="1497.0,290.0 1300.0,730.0 745.6,777.0" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="1497.0,870.0 1230.0,879.0" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="1370.0,680.0 746.0,680.0" fill="none" stroke="#555" stroke-width="1.4"/>
+<polyline points="1370.0,652.0 1225.6,589.7" fill="none" stroke="#555" stroke-width="1.4"/>
+<ellipse cx="568" cy="180" rx="178" ry="44" fill="#efefef" stroke="#333" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="568" y="168.0">UC02 Consultar cardápio</tspan><tspan x="568" y="192.0">da unidade</tspan></text>
+<ellipse cx="568" cy="280" rx="178" ry="44" fill="#efefef" stroke="#333" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="568" y="280.0">UC05 Acompanhar pedido</tspan></text>
+<ellipse cx="568" cy="380" rx="178" ry="44" fill="#efefef" stroke="#333" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="568" y="368.0">UC08 Gerenciar</tspan><tspan x="568" y="392.0">consentimento</tspan></text>
+<ellipse cx="568" cy="480" rx="178" ry="44" fill="#efefef" stroke="#333" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="568" y="468.0">UC09 Consultar pontos</tspan><tspan x="568" y="492.0">de fidelidade</tspan></text>
+<ellipse cx="568" cy="580" rx="178" ry="44" fill="#efefef" stroke="#333" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="568" y="580.0">UC03 Realizar pedido</tspan></text>
+<ellipse cx="568" cy="680" rx="178" ry="44" fill="#efefef" stroke="#333" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="568" y="668.0">UC04 Solicitar</tspan><tspan x="568" y="692.0">pagamento</tspan></text>
+<ellipse cx="568" cy="780" rx="178" ry="44" fill="#efefef" stroke="#333" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="568" y="780.0">UC06 Cancelar pedido</tspan></text>
+<ellipse cx="1052" cy="180" rx="178" ry="44" fill="#efefef" stroke="#333" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="1052" y="168.0">UC11 Consultar estoque</tspan><tspan x="1052" y="192.0">da unidade</tspan></text>
+<ellipse cx="1052" cy="280" rx="178" ry="44" fill="#efefef" stroke="#333" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="1052" y="268.0">UC12 Consultar trilha</tspan><tspan x="1052" y="292.0">de auditoria</tspan></text>
+<ellipse cx="1052" cy="380" rx="178" ry="44" fill="#ffffff" stroke="#777" stroke-dasharray="7 5" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#666" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="1052" y="368.0">UC13 Registrar entrada</tspan><tspan x="1052" y="392.0">de estoque (planejado)</tspan></text>
+<ellipse cx="1052" cy="480" rx="178" ry="44" fill="#ffffff" stroke="#777" stroke-dasharray="7 5" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#666" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="1052" y="468.0">UC14 Consultar relatórios</tspan><tspan x="1052" y="492.0">gerenciais (planejado)</tspan></text>
+<ellipse cx="1052" cy="580" rx="178" ry="44" fill="#efefef" stroke="#333" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="1052" y="568.0">UC10 Notificar resultado</tspan><tspan x="1052" y="592.0">do pagamento</tspan></text>
+<ellipse cx="1052" cy="880" rx="178" ry="44" fill="#efefef" stroke="#333" stroke-width="1.6"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="1052" y="868.0">UC07 Atualizar status</tspan><tspan x="1052" y="892.0">do pedido</tspan></text>
+<circle cx="140" cy="394" r="16" stroke="#222" stroke-width="2.2" fill="none"/><line x1="140" y1="410" x2="140" y2="454" stroke="#222" stroke-width="2.2" fill="none"/><line x1="114" y1="428" x2="166" y2="428" stroke="#222" stroke-width="2.2" fill="none"/><line x1="140" y1="454" x2="120" y2="486" stroke="#222" stroke-width="2.2" fill="none"/><line x1="140" y1="454" x2="160" y2="486" stroke="#222" stroke-width="2.2" fill="none"/><text font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="140" y="516.8">Cliente</tspan><tspan x="140" y="543.2">(App / Web / Totem)</tspan></text>
+<circle cx="140" cy="814" r="16" stroke="#222" stroke-width="2.2" fill="none"/><line x1="140" y1="830" x2="140" y2="874" stroke="#222" stroke-width="2.2" fill="none"/><line x1="114" y1="848" x2="166" y2="848" stroke="#222" stroke-width="2.2" fill="none"/><line x1="140" y1="874" x2="120" y2="906" stroke="#222" stroke-width="2.2" fill="none"/><line x1="140" y1="874" x2="160" y2="906" stroke="#222" stroke-width="2.2" fill="none"/><text font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="140" y="936.8">Atendente</tspan><tspan x="140" y="963.2">(Balcão)</tspan></text>
+<circle cx="1525" cy="254" r="16" stroke="#222" stroke-width="2.2" fill="none"/><line x1="1525" y1="270" x2="1525" y2="314" stroke="#222" stroke-width="2.2" fill="none"/><line x1="1499" y1="288" x2="1551" y2="288" stroke="#222" stroke-width="2.2" fill="none"/><line x1="1525" y1="314" x2="1505" y2="346" stroke="#222" stroke-width="2.2" fill="none"/><line x1="1525" y1="314" x2="1545" y2="346" stroke="#222" stroke-width="2.2" fill="none"/><text font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="1525" y="376.8">Gerente /</tspan><tspan x="1525" y="403.2">Administrador</tspan></text>
+<circle cx="1525" cy="834" r="16" stroke="#222" stroke-width="2.2" fill="none"/><line x1="1525" y1="850" x2="1525" y2="894" stroke="#222" stroke-width="2.2" fill="none"/><line x1="1499" y1="868" x2="1551" y2="868" stroke="#222" stroke-width="2.2" fill="none"/><line x1="1525" y1="894" x2="1505" y2="926" stroke="#222" stroke-width="2.2" fill="none"/><line x1="1525" y1="894" x2="1545" y2="926" stroke="#222" stroke-width="2.2" fill="none"/><text font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="1525" y="970.0">Cozinha</tspan></text>
+<rect x="1370" y="640" width="270" height="84" fill="#ffffff" stroke="#222" stroke-width="1.8"/>
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#111" font-weight="normal" text-anchor="middle" dominant-baseline="middle"><tspan x="1505.0" y="670.0">«sistema externo»</tspan><tspan x="1505.0" y="694.0">Gateway de Pagamento</tspan></text>
+<line x1="1240" y1="1020" x2="1300" y2="1020" stroke="#777" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="1310" y="1020" font-family="Arial, Helvetica, sans-serif" font-size="19" fill="#444" dominant-baseline="middle">caso de uso planejado (fora do MVP)</text>
+</svg>

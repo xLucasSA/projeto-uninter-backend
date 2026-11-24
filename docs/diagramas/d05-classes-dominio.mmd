@@ -1,0 +1,80 @@
+%% Diagrama de classes do domínio da API (visão resumida). Fonte: apps/api/src/raizes_api/domain/.
+classDiagram
+    direction TB
+    class Pedido {
+        +UUID id
+        +int unidade_id
+        +CanalPedido canal
+        +StatusPedido status
+        +UUID cliente_id
+        +criar() Pedido
+        +total() Dinheiro
+        +mudar_status() MudancaDeStatus
+    }
+    class ItemPedido {
+        +int produto_id
+        +int quantidade
+        +Dinheiro preco_unitario
+        +subtotal() Dinheiro
+    }
+    class Pagamento {
+        +UUID id
+        +StatusPagamento status
+        +Dinheiro valor
+        +int tentativas
+        +registrar_aceite()
+        +registrar_falha()
+        +aplicar_resultado()
+    }
+    class Cliente {
+        +UUID id
+        +str email
+        +Telefone telefone
+        +pode_autenticar() bool
+        +conceder_consentimento()
+        +revogar_consentimento()
+    }
+    class Consentimento {
+        +Finalidade finalidade
+        +str versao_termo
+        +esta_ativo() bool
+    }
+    class LancamentoFidelidade {
+        +TipoLancamento tipo
+        +int pontos
+        +estornar() LancamentoFidelidade
+    }
+    class Dinheiro {
+        <<value object>>
+        +Decimal valor
+        +somar() Dinheiro
+    }
+    class StatusPedido {
+        <<enumeration>>
+        AGUARDANDO_PAGAMENTO
+        PAGO
+        EM_PREPARO
+        PRONTO
+        ENTREGUE
+        PAGAMENTO_RECUSADO
+        CANCELADO
+    }
+    class CanalPedido {
+        <<enumeration>>
+        APP
+        TOTEM
+        BALCAO
+        PICKUP
+        WEB
+    }
+
+    Pedido "1" *-- "1..30" ItemPedido
+    Pedido --> StatusPedido
+    Pedido --> CanalPedido
+    Pagamento "0..*" --> "1" Pedido
+    Cliente "0..1" <-- "0..*" Pedido
+    Cliente "1" *-- "0..*" Consentimento
+    LancamentoFidelidade "0..*" --> "1" Cliente
+    LancamentoFidelidade "0..2" --> "1" Pedido
+    ItemPedido ..> Dinheiro
+    Pagamento ..> Dinheiro

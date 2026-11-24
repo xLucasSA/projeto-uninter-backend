@@ -1,0 +1,76 @@
+%% DER do schema catalogo (dono: backoffice Django). Fonte: apps/backoffice/*/models.py.
+%% Enums com CHECK: regiao (N, NE, CO, SE, S), tipo da unidade (COMPLETA, REDUZIDA), categoria,
+%% tipo da movimentação (ENTRADA, SAIDA_PEDIDO, ESTORNO_PEDIDO, AJUSTE) e origem (BACKOFFICE, API).
+erDiagram
+    direction LR
+    UNIDADES ||--o{ CARDAPIO_UNIDADE : oferece
+    PRODUTOS ||--o{ CARDAPIO_UNIDADE : "compõe"
+    UNIDADES ||--o{ ESTOQUE : possui
+    PRODUTOS ||--o{ ESTOQUE : "é estocado"
+    UNIDADES ||--o{ MOVIMENTACAO_ESTOQUE : registra
+    PRODUTOS ||--o{ MOVIMENTACAO_ESTOQUE : movimenta
+    FUNCIONARIOS |o--o{ MOVIMENTACAO_ESTOQUE : "lança"
+    FUNCIONARIOS ||--o{ FUNCIONARIOS_UNIDADES : "atua em"
+    UNIDADES ||--o{ FUNCIONARIOS_UNIDADES : "tem equipe"
+    UNIDADES ||--o{ DISPOSITIVOS : "tem totens"
+
+    UNIDADES {
+        bigint id PK
+        varchar codigo UK
+        varchar nome
+        varchar regiao "CHECK"
+        varchar tipo "CHECK"
+        boolean ativa
+    }
+    PRODUTOS {
+        bigint id PK
+        varchar sku UK
+        varchar nome
+        varchar categoria "CHECK"
+        boolean requer_cozinha_completa
+        boolean ativo
+    }
+    FUNCIONARIOS {
+        bigint id PK
+        varchar email UK
+        varchar password "Argon2"
+        boolean is_staff
+    }
+    CARDAPIO_UNIDADE {
+        bigint id PK
+        bigint unidade_id FK
+        bigint produto_id FK
+        numeric preco "> 0"
+        boolean ativo
+        date disponivel_de
+        date disponivel_ate
+    }
+    ESTOQUE {
+        bigint id PK
+        bigint unidade_id FK
+        bigint produto_id FK
+        int quantidade ">= 0"
+    }
+    MOVIMENTACAO_ESTOQUE {
+        bigint id PK
+        bigint unidade_id FK
+        bigint produto_id FK
+        bigint funcionario_id FK
+        varchar tipo "CHECK"
+        varchar origem "CHECK"
+        int quantidade "com sinal"
+        int saldo_apos
+        uuid pedido_id "ref. lógica"
+    }
+    FUNCIONARIOS_UNIDADES {
+        bigint id PK
+        bigint funcionario_id FK
+        bigint unidade_id FK
+    }
+    DISPOSITIVOS {
+        bigint id PK
+        bigint unidade_id FK
+        varchar client_id UK
+        varchar secret_hash "Argon2"
+        boolean ativo
+    }
